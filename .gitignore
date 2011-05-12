@@ -1,0 +1,5 @@
+.DS_Store
+build
+Products
+*.mode1v3
+*.pbxuser
