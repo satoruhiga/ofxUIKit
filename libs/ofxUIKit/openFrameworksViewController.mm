@@ -5,8 +5,6 @@
 #import "openFrameworksViewController.h"
 #import "ofEAGLView.h"
 
-
-
 static CGSize windowSize;
 
 int ofGetWidth()
@@ -38,7 +36,12 @@ int ofGetHeight()
 	[super viewDidLoad];
 
 	activeTouches = [[NSMutableDictionary alloc] init];
-	self.view = [[[ofEAGLView alloc] init] autorelease];
+	
+	if ([self.view class] != [ofEAGLView class])
+	{
+		ofLog(OF_LOG_WARNING, "self.view is not class of ofEAGLView");
+		self.view = [[[ofEAGLView alloc] init] autorelease];
+	}
 
 	EAGLContext *aContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
 
