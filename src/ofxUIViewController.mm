@@ -190,11 +190,16 @@ static ofxiPhoneWindowProxy *window_proxy;
 {
 }
 
+- (void)touchDown:(CGPoint)point touchIndex:(int)touchIndex {}
+- (void)touchMoved:(CGPoint)point touchIndex:(int)touchIndex {}
+- (void)touchUp:(CGPoint)point touchIndex:(int)touchIndex {}
+- (void)touchDoubleTap:(CGPoint)point touchIndex:(int)touchIndex {}
+
 #pragma mark touches
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	[(MyEAGLView *)self.view setFramebuffer];
+	[glView setFramebuffer];
 	
 	for (UITouch *i in touches)
 	{
@@ -218,7 +223,7 @@ static ofxiPhoneWindowProxy *window_proxy;
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	[(MyEAGLView *)self.view setFramebuffer];
+	[glView setFramebuffer];
 	
 	for (UITouch *i in touches)
 	{
@@ -235,7 +240,7 @@ static ofxiPhoneWindowProxy *window_proxy;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	[(MyEAGLView *)self.view setFramebuffer];
+	[glView setFramebuffer];
 	
 	for (UITouch *i in touches)
 	{

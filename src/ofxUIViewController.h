@@ -33,6 +33,6 @@
 - (void)touchDown:(CGPoint)point touchIndex:(int)touchIndex;
 - (void)touchMoved:(CGPoint)point touchIndex:(int)touchIndex;
 - (void)touchUp:(CGPoint)point touchIndex:(int)touchIndex;
-// - (void)touchDoubleTap:(CGPoint)point touchIndex:(int)touchIndex;
+- (void)touchDoubleTap:(CGPoint)point touchIndex:(int)touchIndex;
 
 @end
