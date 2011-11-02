@@ -25,22 +25,28 @@
     return [CAEAGLLayer class];
 }
 
-//The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:.
-- (id)initWithCoder:(NSCoder*)coder
+- (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithCoder:coder];
+	self = [super initWithFrame:frame];
 	if (self)
-    {
+	{
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         
-        eaglLayer.opaque = TRUE;
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking,
                                         kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat,
                                         nil];
-    }
-    
-    return self;
+		
+		self.opaque = NO;
+		self.backgroundColor = [UIColor clearColor];
+		
+        eaglLayer.opaque = NO;
+		CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+		const CGFloat myColor[] = {0.0, 0.0, 0.0, 0.0};
+		eaglLayer.backgroundColor = CGColorCreate(rgb, myColor);
+		CGColorSpaceRelease(rgb);
+	}
+	return self;
 }
 
 - (void)dealloc
@@ -88,6 +94,11 @@
         
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
         
+		glGenRenderbuffers(1, &depthRenderbuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, framebufferWidth, framebufferHeight);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
     }
@@ -110,6 +121,12 @@
             glDeleteRenderbuffers(1, &colorRenderbuffer);
             colorRenderbuffer = 0;
         }
+		
+		if (depthRenderbuffer)
+		{
+			glDeleteRenderbuffers(1, &depthRenderbuffer);
+			depthRenderbuffer = 0;
+		}
     }
 }
 
